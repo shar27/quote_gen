@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quote Generator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
 
     <style>
       body {
@@ -221,21 +221,18 @@
       }
 
       function downloadPDF() {
-    const quoteContent = document.getElementById("quoteOutput").innerHTML;
+        const quoteElement = document.getElementById("quoteOutput");
 
-    // Use DOMPurify to sanitize the HTML content
-    const sanitizedContent = DOMPurify.sanitize(quoteContent);
+        const options = {
+            margin: 1,
+            filename: 'quote.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
 
-    // Generate PDF
-    const doc = new jspdf.jsPDF();
-    doc.html(sanitizedContent, {
-        callback: function (doc) {
-            doc.save("quote.pdf");
-        },
-        x: 10,
-        y: 10
-    });
-}
+        html2pdf().set(options).from(quoteElement).save();
+    }
 
 
       function clearForm() {
