@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        label {
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <a href="/">Home</a>
+        <a href="/pages//invoice-gen.html">Invoice</a>
+    <div class="container">
+        <h1>Quote Generator</h1>
+        <form id="quoteForm">
+            <label for="clientName">Client Name:</label><br>
+            <input type="text" id="clientName" placeholder="Enter client name" required><br><br>
+
+            <label for="clientAddress">Client Address:</label><br>
+            <input type="text" id="clientAddress" placeholder="Enter client address" required><br><br>
+
+            <label for="clientEmail">Client Email:</label><br>
+            <input type="email" id="clientEmail" placeholder="Enter client email" required><br><br>
+
+            <label for="clientPhone">Client Phone:</label><br>
+            <input type="text" id="clientPhone" placeholder="Enter client phone number" required><br><br>
+
+            <label for="itemDescription">Item Description:</label><br>
+            <input type="text" id="itemDescription" placeholder="Enter item description" required><br><br>
+
+            <label for="quantity">Quantity:</label><br>
+            <input type="number" id="quantity" placeholder="Enter quantity" required><br><br>
+
+            <label for="unitPrice">Unit Price (£):</label><br>
+            <input type="number" id="unitPrice" placeholder="Enter unit price" required><br><br>
+
+            <button type="button" onclick="generateQuote()">Generate Quote</button>
+        </form>
+
+        <h2>Generated Quote:</h2>
+        <div id="quoteOutput"></div>
+        <button onclick="downloadPDF()">Download as PDF</button>
+    </div>
+
+    <script>
+        function generateQuote() {
+            const clientName = document.getElementById("clientName").value;
+            const clientAddress = document.getElementById("clientAddress").value;
+            const clientEmail = document.getElementById("clientEmail").value;
+            const clientPhone = document.getElementById("clientPhone").value;
+            const itemDescription = document.getElementById("itemDescription").value;
+            const quantity = document.getElementById("quantity").value;
+            const unitPrice = document.getElementById("unitPrice").value;
+            const lineTotal = quantity * unitPrice;
+
+            const quoteHTML = `
+                <p><strong>Client Name:</strong> ${clientName}</p>
+                <p><strong>Client Address:</strong> ${clientAddress}</p>
+                <p><strong>Client Email:</strong> ${clientEmail}</p>
+                <p><strong>Client Phone:</strong> ${clientPhone}</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item Description</th>
+                            <th>Quantity</th>
+                            <th>Unit Price (£)</th>
+                            <th>Line Total (£)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>${itemDescription}</td>
+                            <td>${quantity}</td>
+                            <td>${unitPrice}</td>
+                            <td>${lineTotal.toFixed(2)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>Total:</strong> £${lineTotal.toFixed(2)}</p>
+            `;
+
+            document.getElementById("quoteOutput").innerHTML = quoteHTML;
+        }
+
+        function downloadPDF() {
+            const quoteContent = document.getElementById("quoteOutput").innerHTML;
+            const doc = new jspdf.jsPDF();
+            doc.html(quoteContent, {
+                callback: function (doc) {
+                    doc.save("quote.pdf");
+                },
+                x: 10,
+                y: 10
+            });
+        }
+    </script>
+</body>
+</html>
