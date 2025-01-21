@@ -43,12 +43,15 @@
         button:hover {
             background-color: #0056b3;
         }
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
-    <a href="/">Home</a>
-        <a href="/pages//invoice-gen.html">Invoice</a>
     <div class="container">
+        <img src="YOUR_LOGO_URL_HERE" alt="Company Logo" class="logo">
         <h1>Quote Generator</h1>
         <form id="quoteForm">
             <label for="clientName">Client Name:</label><br>
@@ -63,33 +66,80 @@
             <label for="clientPhone">Client Phone:</label><br>
             <input type="text" id="clientPhone" placeholder="Enter client phone number" required><br><br>
 
-            <label for="itemDescription">Item Description:</label><br>
-            <input type="text" id="itemDescription" placeholder="Enter item description" required><br><br>
+            <h2>Items</h2>
+            <div id="itemsContainer">
+                <div class="item">
+                    <label for="itemDescription">Item Description:</label><br>
+                    <input type="text" class="itemDescription" placeholder="Enter item description" required><br><br>
 
-            <label for="quantity">Quantity:</label><br>
-            <input type="number" id="quantity" placeholder="Enter quantity" required><br><br>
+                    <label for="quantity">Quantity:</label><br>
+                    <input type="number" class="quantity" placeholder="Enter quantity" required><br><br>
 
-            <label for="unitPrice">Unit Price (£):</label><br>
-            <input type="number" id="unitPrice" placeholder="Enter unit price" required><br><br>
+                    <label for="unitPrice">Unit Price (£):</label><br>
+                    <input type="number" class="unitPrice" placeholder="Enter unit price" required><br><br>
+                </div>
+            </div>
+            <button type="button" onclick="addItem()">Add Another Item</button><br><br>
 
             <button type="button" onclick="generateQuote()">Generate Quote</button>
+            <button type="button" onclick="clearForm()">Clear All</button>
         </form>
 
         <h2>Generated Quote:</h2>
         <div id="quoteOutput"></div>
         <button onclick="downloadPDF()">Download as PDF</button>
+
+        <p style="margin-top: 20px;">
+            <a href="https://www.trustpilot.com/review/swiftukproperties.co.uk" target="_blank">
+                Check our reviews on Trustpilot
+            </a>
+        </p>
     </div>
 
     <script>
+        function addItem() {
+            const container = document.getElementById("itemsContainer");
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "item";
+            itemDiv.innerHTML = `
+                <label for="itemDescription">Item Description:</label><br>
+                <input type="text" class="itemDescription" placeholder="Enter item description" required><br><br>
+
+                <label for="quantity">Quantity:</label><br>
+                <input type="number" class="quantity" placeholder="Enter quantity" required><br><br>
+
+                <label for="unitPrice">Unit Price (£):</label><br>
+                <input type="number" class="unitPrice" placeholder="Enter unit price" required><br><br>
+            `;
+            container.appendChild(itemDiv);
+        }
+
         function generateQuote() {
             const clientName = document.getElementById("clientName").value;
             const clientAddress = document.getElementById("clientAddress").value;
             const clientEmail = document.getElementById("clientEmail").value;
             const clientPhone = document.getElementById("clientPhone").value;
-            const itemDescription = document.getElementById("itemDescription").value;
-            const quantity = document.getElementById("quantity").value;
-            const unitPrice = document.getElementById("unitPrice").value;
-            const lineTotal = quantity * unitPrice;
+
+            const items = document.querySelectorAll(".item");
+            let tableRows = "";
+            let total = 0;
+
+            items.forEach(item => {
+                const description = item.querySelector(".itemDescription").value;
+                const quantity = parseInt(item.querySelector(".quantity").value);
+                const unitPrice = parseFloat(item.querySelector(".unitPrice").value);
+                const lineTotal = quantity * unitPrice;
+                total += lineTotal;
+
+                tableRows += `
+                    <tr>
+                        <td>${description}</td>
+                        <td>${quantity}</td>
+                        <td>£${unitPrice.toFixed(2)}</td>
+                        <td>£${lineTotal.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
 
             const quoteHTML = `
                 <p><strong>Client Name:</strong> ${clientName}</p>
@@ -106,15 +156,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>${itemDescription}</td>
-                            <td>${quantity}</td>
-                            <td>${unitPrice}</td>
-                            <td>${lineTotal.toFixed(2)}</td>
-                        </tr>
+                        ${tableRows}
                     </tbody>
                 </table>
-                <p><strong>Total:</strong> £${lineTotal.toFixed(2)}</p>
+                <p><strong>Total:</strong> £${total.toFixed(2)}</p>
+                <h3>Payment Details:</h3>
+                <p><strong>Beneficiary:</strong> SWIFT UK PROPERTY INVESTMENTS LTD</p>
+                <p><strong>Account Number:</strong> 94087253</p>
+                <p><strong>Sort Code:</strong> 04-29-09</p>
+                <p>
+                    <a href="https://www.trustpilot.com/review/swiftukproperties.co.uk" target="_blank">
+                        Check our reviews on Trustpilot
+                    </a>
+                </p>
             `;
 
             document.getElementById("quoteOutput").innerHTML = quoteHTML;
@@ -130,6 +184,23 @@
                 x: 10,
                 y: 10
             });
+        }
+
+        function clearForm() {
+            document.getElementById("quoteForm").reset();
+            document.getElementById("itemsContainer").innerHTML = `
+                <div class="item">
+                    <label for="itemDescription">Item Description:</label><br>
+                    <input type="text" class="itemDescription" placeholder="Enter item description" required><br><br>
+
+                    <label for="quantity">Quantity:</label><br>
+                    <input type="number" class="quantity" placeholder="Enter quantity" required><br><br>
+
+                    <label for="unitPrice">Unit Price (£):</label><br>
+                    <input type="number" class="unitPrice" placeholder="Enter unit price" required><br><br>
+                </div>
+            `;
+            document.getElementById("quoteOutput").innerHTML = "";
         }
     </script>
 </body>
