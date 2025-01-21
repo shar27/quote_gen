@@ -40,7 +40,7 @@
 <body>
     <nav>
         <a href="/">Home</a>
-        <a href="/pages//invoice-gen.html">Invoice</a>
+        <a href="/pages/invoice-gen.html">Invoice</a>
     </nav>
     <div class="container">
         <h1>Property Maintenance Email Generator</h1>
@@ -48,12 +48,21 @@
             <label for="name">Client Name:</label><br>
             <input type="text" id="name" placeholder="Enter client name" required><br><br>
 
+            <label for="address">Address:</label><br>
+            <input type="text" id="address" placeholder="Enter client address" required><br><br>
+
+            <label for="pointOfContact">Point of Contact:</label><br>
+            <input type="text" id="pointOfContact" placeholder="Enter point of contact name" required><br><br>
+
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" placeholder="Enter client email" required><br><br>
+
             <label for="totalPrice">Total Price (£):</label><br>
             <input type="number" id="totalPrice" placeholder="Enter total price" required><br><br>
 
             <label for="deposit">Deposit (£):</label><br>
             <input type="number" id="deposit" placeholder="Enter deposit amount" required><br><br>
-
+            
             <label for="preferredDate">Preferred Date:</label><br>
             <input type="date" id="preferredDate" required><br><br>
 
@@ -74,6 +83,9 @@
     <script>
         function generateEmail() {
             const name = document.getElementById("name").value;
+            const address = document.getElementById("address").value;
+            const pointOfContact = document.getElementById("pointOfContact").value;
+            const email = document.getElementById("email").value;
             const totalPrice = document.getElementById("totalPrice").value;
             const deposit = document.getElementById("deposit").value;
             const preferredDate = document.getElementById("preferredDate").value;
@@ -89,30 +101,34 @@ The total price for this property maintenance will be £${totalPrice}.
 
 To confirm your booking, we require a 50% deposit of £${deposit} to be paid upfront. 
 
+**Client Details:**  
+- **Address:** ${address}  
+- **Point of Contact:** ${pointOfContact}  
+- **Email:** ${email}  
+
 Please also confirm the following:
 
-Preferred Date: ${preferredDate}
-Preferred Time: ${preferredTime}
+Preferred Date: ${preferredDate}  
+Preferred Time: ${preferredTime}  
 
 Here are the bank details for making the payment:
 
-Beneficiary: SWIFT UK PROPERTY INVESTMENTS LTD
-Account number: 94087253
-Sort code: 04-29-09
+**Beneficiary:** SWIFT UK PROPERTY INVESTMENTS LTD  
+**Account number:** 94087253  
+**Sort code:** 04-29-09  
 
-Transfer:
-£${deposit}
+Transfer:  
+£${deposit}  
 
-Payment Reference:
-${paymentReference}
+Payment Reference:  
+${paymentReference}  
 
-Many thanks,
+Many thanks,  
+Shar  
 
-Shar
+t: 07907 772 626  
 
-t: 07907 772 626
-
-https://www.trustpilot.com/review/swiftukproperties.co.uk
+[Check our reviews on Trustpilot](https://www.trustpilot.com/review/swiftukproperties.co.uk)
             `;
             document.getElementById("output").value = emailTemplate.trim();
         }
