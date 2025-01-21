@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Maintenance Email Template</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        label {
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-top: 10px;
+            font-family: Arial, sans-serif;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Property Maintenance Email Generator</h1>
+        <form id="emailForm">
+            <label for="name">Client Name:</label><br>
+            <input type="text" id="name" placeholder="Enter client name" required><br><br>
+
+            <label for="totalPrice">Total Price (£):</label><br>
+            <input type="number" id="totalPrice" placeholder="Enter total price" required><br><br>
+
+            <label for="deposit">Deposit (£):</label><br>
+            <input type="number" id="deposit" placeholder="Enter deposit amount" required><br><br>
+
+            <label for="preferredDate">Preferred Date:</label><br>
+            <input type="date" id="preferredDate" required><br><br>
+
+            <label for="preferredTime">Preferred Time:</label><br>
+            <input type="text" id="preferredTime" placeholder="Enter preferred time (e.g., 'tbc')" required><br><br>
+
+            <label for="paymentReference">Payment Reference:</label><br>
+            <input type="text" id="paymentReference" placeholder="Enter payment reference (e.g., postcode)" required><br><br>
+
+            <button type="button" onclick="generateEmail()">Generate Email</button>
+        </form>
+
+        <h2>Generated Email:</h2>
+        <textarea id="output" readonly></textarea>
+        <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    </div>
+
+    <script>
+        function generateEmail() {
+            const name = document.getElementById("name").value;
+            const totalPrice = document.getElementById("totalPrice").value;
+            const deposit = document.getElementById("deposit").value;
+            const preferredDate = document.getElementById("preferredDate").value;
+            const preferredTime = document.getElementById("preferredTime").value;
+            const paymentReference = document.getElementById("paymentReference").value;
+
+            const emailTemplate = `
+Hi ${name},
+
+Thank you for your patience.
+
+The total price for this property maintenance will be £${totalPrice}.
+
+To confirm your booking, we require a 50% deposit of £${deposit} to be paid upfront. 
+
+Please also confirm the following:
+
+Preferred Date: ${preferredDate}
+Preferred Time: ${preferredTime}
+
+Here are the bank details for making the payment:
+
+Beneficiary: SWIFT UK PROPERTY INVESTMENTS LTD
+Account number: 94087253
+Sort code: 04-29-09
+
+Transfer:
+£${deposit}
+
+Payment Reference:
+${paymentReference}
+
+Many thanks,
+
+Shar
+
+t: 07907 772 626
+
+https://www.trustpilot.com/review/swiftukproperties.co.uk
+            `;
+            document.getElementById("output").value = emailTemplate.trim();
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById("output");
+            output.select();
+            output.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand("copy");
+            alert("Email template copied to clipboard!");
+        }
+    </script>
+</body>
+</html>
